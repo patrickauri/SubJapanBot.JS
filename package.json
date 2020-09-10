@@ -1,0 +1,20 @@
+{
+	"name": "subjapanbot-js",
+	"version": "1.0.0",
+	"description": "The SubJapanBot rewritten in Javascript",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js",
+		"demo": "nodemon app.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "subjapanbot.js"
+	},
+	"author": "Patrick Auri",
+	"license": "ISC",
+	"dependencies": {
+		"discord.js": "^12.3.1",
+		"dotenv": "^8.2.0"
+	}
+}
