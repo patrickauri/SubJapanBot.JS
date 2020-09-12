@@ -2,8 +2,6 @@
 
 SubJapanBot.JS is a Discord bot written specifically for the SubJapan Discord Server at https://discord.gg/rm4JfBh
 
-SubJapan Discord-server
-
 ## SubJapan - Når sukiyaki møter fårikal.
 SubJapans mål er å skape en avslappet setting der japanere og andre som er interessert i Japan og japansk kan knytte nye vennskap, språkutveksle og utvide nettverket sitt. Før Covid-19 var vi mye på SubScene i Oslo, men nå skjer mye av aktiviteten her på Discord　:)
 
