@@ -115,61 +115,16 @@ const AddAndRemoveRoles = (msg, addRole, removeRoles) => {
 	AddRole(msg, addRole);
 };
 
-const PerformCommand = (msg) => {
-	const cmd = parseCommand(msg.content);
-	// Show TASUKETE regardless of channel
-	if (cmd.command === 'tasukete') {
-		Tasukete(msg);
-	}
-	// Only perform role changes in the bot channel
-	if (msg.channel.id === botChannel) {
-		switch (cmd.command) {
-			case 'n1':
-				AddAndRemoveRoles(msg, 'n1', [ 'n2', 'n3', 'n4' ]);
-				break;
-			case 'n2':
-				AddAndRemoveRoles(msg, 'n2', [ 'n1', 'n3', 'n4' ]);
-				break;
-			case 'n3':
-				AddAndRemoveRoles(msg, 'n3', [ 'n2', 'n1', 'n4' ]);
-				break;
-			case 'n4':
-				AddAndRemoveRoles(msg, 'n4', [ 'n2', 'n3', 'n1' ]);
-				break;
-			case 'j1':
-				AddAndRemoveRoles(msg, 'j1', [ 'j2', 'j3', 'j4' ]);
-				break;
-			case 'j2':
-				AddAndRemoveRoles(msg, 'j2', [ 'j1', 'j3', 'j4' ]);
-				break;
-			case 'j3':
-				AddAndRemoveRoles(msg, 'j3', [ 'j2', 'j1', 'j4' ]);
-				break;
-			case 'j4':
-				AddAndRemoveRoles(msg, 'j4', [ 'j2', 'j3', 'j1' ]);
-				break;
-			case 'e1':
-				AddAndRemoveRoles(msg, 'e1', [ 'e2', 'e3', 'e4' ]);
-				break;
-			case 'e2':
-				AddAndRemoveRoles(msg, 'e2', [ 'e1', 'e3', 'e4' ]);
-				break;
-			case 'e3':
-				AddAndRemoveRoles(msg, 'e3', [ 'e2', 'e1', 'e4' ]);
-				break;
-			case 'e4':
-				AddAndRemoveRoles(msg, 'e4', [ 'e2', 'e3', 'e1' ]);
-				break;
-			case 'nh':
-				AddRole(msg, 'nh');
-				break;
-			case 'jh':
-				AddRole(msg, 'jh');
-				break;
-			case 'eh':
-				AddRole(msg, 'eh');
-				break;
+const PurgeMessages = (msg, cmd) => {
+	const f = 'Syntax: .purge + antall meldinger å slette';
+	if (msg.member.roles.cache.has('696727197968236634')) {
+		if (cmd.content === undefined) {
+			msg.reply(f);
+		} else {
+			msg.channel.bulkDelete(cmd.content).then().catch(() => msg.reply(f));
 		}
+	} else {
+		console.log(`${msg.member.name} tried to purge.`);
 	}
 };
 
@@ -179,7 +134,64 @@ client.on('ready', () => {
 
 client.on('message', (msg) => {
 	if (isCommand(msg.content)) {
-		PerformCommand(msg);
+		const cmd = parseCommand(msg.content);
+		// Show TASUKETE regardless of channel
+		if (cmd.command === 'tasukete') {
+			Tasukete(msg);
+		}
+		if (cmd.command === 'purge') {
+			PurgeMessages(msg, cmd);
+		}
+		// Only perform role changes in the bot channel
+		if (msg.channel.id === botChannel) {
+			switch (cmd.command) {
+				case 'n1':
+					AddAndRemoveRoles(msg, 'n1', [ 'n2', 'n3', 'n4' ]);
+					break;
+				case 'n2':
+					AddAndRemoveRoles(msg, 'n2', [ 'n1', 'n3', 'n4' ]);
+					break;
+				case 'n3':
+					AddAndRemoveRoles(msg, 'n3', [ 'n2', 'n1', 'n4' ]);
+					break;
+				case 'n4':
+					AddAndRemoveRoles(msg, 'n4', [ 'n2', 'n3', 'n1' ]);
+					break;
+				case 'j1':
+					AddAndRemoveRoles(msg, 'j1', [ 'j2', 'j3', 'j4' ]);
+					break;
+				case 'j2':
+					AddAndRemoveRoles(msg, 'j2', [ 'j1', 'j3', 'j4' ]);
+					break;
+				case 'j3':
+					AddAndRemoveRoles(msg, 'j3', [ 'j2', 'j1', 'j4' ]);
+					break;
+				case 'j4':
+					AddAndRemoveRoles(msg, 'j4', [ 'j2', 'j3', 'j1' ]);
+					break;
+				case 'e1':
+					AddAndRemoveRoles(msg, 'e1', [ 'e2', 'e3', 'e4' ]);
+					break;
+				case 'e2':
+					AddAndRemoveRoles(msg, 'e2', [ 'e1', 'e3', 'e4' ]);
+					break;
+				case 'e3':
+					AddAndRemoveRoles(msg, 'e3', [ 'e2', 'e1', 'e4' ]);
+					break;
+				case 'e4':
+					AddAndRemoveRoles(msg, 'e4', [ 'e2', 'e3', 'e1' ]);
+					break;
+				case 'nh':
+					AddRole(msg, 'nh');
+					break;
+				case 'jh':
+					AddRole(msg, 'jh');
+					break;
+				case 'eh':
+					AddRole(msg, 'eh');
+					break;
+			}
+		}
 	}
 });
 
