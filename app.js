@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const request = require('request');
 require('dotenv').config();
 const client = new Discord.Client();
 
@@ -128,6 +129,77 @@ const PurgeMessages = (msg, cmd) => {
 	}
 };
 
+const JishoSearch = (msg, cmd) => {
+	const parseBoy = (boy) => {
+		switch (boy) {
+			case 'verb':
+				return '動詞';
+				break;
+			case 'adj':
+				return '形容詞';
+				break;
+			case 'preposisjon':
+				return '前置詞';
+				break;
+			case 'interjeksjon':
+				return '感動詞';
+				break;
+			case 'prefiks':
+				return '接頭辞';
+				break;
+			case 'adv':
+				return '副詞';
+				break;
+			case 'det':
+				return '限定詞';
+				break;
+			case 'subjunksjon':
+				return '関係詞';
+				break;
+			case 'pron':
+				return '代名詞';
+				break;
+			case 'konjunksjon':
+				return '接続詞';
+				break;
+			case 'subst':
+				return '名詞';
+				break;
+		}
+	};
+
+	if (cmd.content !== undefined) {
+		const query = 'https://api.jisho.no/search/' + cmd.content;
+		const noResults = `Jisho-søket ${cmd.content} ga ingen resultater. 問い合わせに合致する検索結果はありませんでした。`;
+		request(query, { json: true }, (err, res, body) => {
+			if (err) {
+				return console.log(err);
+			}
+			if (body.length > 0) {
+				let result = '';
+				const mdCode = (s) => {
+					return '```' + s + '```';
+				};
+				body.forEach((e, i) => {
+					console.log(e);
+					let u = '';
+					e.uttale.forEach((ue, i) => {
+						u += e.uttale[i].transkripsjon;
+					});
+					let d = '';
+					e.definisjoner.forEach((de, i) => {
+						d += `${i + 1}: ${de.definisjon}\n`;
+					});
+					result += `**${e.oppslag}**\t\t` + `*発音: ${u}*\t\t` + `*${parseBoy(e.boy_tabell)}*\n` + mdCode(d);
+				});
+				msg.channel.send(result);
+			} else {
+				msg.channel.send(noResults);
+			}
+		});
+	}
+};
+
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}`);
 });
@@ -141,6 +213,9 @@ client.on('message', (msg) => {
 		}
 		if (cmd.command === 'purge') {
 			PurgeMessages(msg, cmd);
+		}
+		if (cmd.command === 'j') {
+			JishoSearch(msg, cmd);
 		}
 		// Only perform role changes in the bot channel
 		if (msg.channel.id === botChannel) {
