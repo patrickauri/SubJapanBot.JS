@@ -190,7 +190,7 @@ const JishoSearch = (msg, cmd) => {
 					e.definisjoner.forEach((de, i) => {
 						d += `${i + 1}: ${de.definisjon}\n`;
 					});
-					result += `**${e.oppslag}**\t\t` + `*発音: ${u}*\t\t` + `*${parseBoy(e.boy_tabell)}*\n` + mdCode(d);
+					result += `**${e.oppslag}**\t\t` + mdCode(`発音: ${u}\t\t` + `${parseBoy(e.boy_tabell)}\n` + d);
 				});
 				msg.channel.send(result);
 			} else {
