@@ -170,7 +170,7 @@ const JishoSearch = (msg, cmd) => {
 
 	if (cmd.content !== undefined) {
 		const query = 'https://api.jisho.no/search/' + cmd.content;
-		const noResults = `Jisho-søket ${cmd.content} ga ingen resultater. 問い合わせに合致する検索結果はありませんでした。`;
+		const noResults = `「${cmd.content}」に一致する見出し語は見つかりませんでした`;
 		request(query, { json: true }, (err, res, body) => {
 			if (err) {
 				return console.log(err);
@@ -181,16 +181,16 @@ const JishoSearch = (msg, cmd) => {
 					return '```' + s + '```';
 				};
 				body.forEach((e, i) => {
-					console.log(e);
 					let u = '';
 					e.uttale.forEach((ue, i) => {
 						u += e.uttale[i].transkripsjon;
 					});
 					let d = '';
 					e.definisjoner.forEach((de, i) => {
-						d += `${i + 1}: ${de.definisjon}\n`;
+						d += `  ${i + 1}: ${de.definisjon}\n`;
 					});
-					result += `**${e.oppslag}**\t\t` + mdCode(`発音: ${u}\t\t` + `${parseBoy(e.boy_tabell)}\n` + d);
+					result += `**${e.oppslag}**\t\t` + mdCode(`発音：${u}\n` + `品詞：${parseBoy(e.boy_tabell)}\n意味：\n` + d);
+					//resultOLD += `**${e.oppslag}**\t\t` + mdCode(`発音: ${u}\t\t` + `${parseBoy(e.boy_tabell)}\n` + d);
 				});
 				msg.channel.send(result);
 			} else {
