@@ -7,6 +7,7 @@ const token = process.env.TOKEN;
 let msg = null;
 const botChannel = '696849439133794384';
 const demoChannel = '696792174867513495';
+const welcomeChannel = '696733496592564294';
 const debug = true;
 
 const roles = [
@@ -27,6 +28,10 @@ const roles = [
 	[ 'eh', '704581903017181255' ],
 	[ 'jh', '704581688528863295' ]
 ];
+
+const RandomArrayElement = (a) => {
+	return a[Math.floor(Math.random() * a.length)];
+};
 
 const isCommand = (msg) => {
 	return msg[0] === '.';
@@ -170,7 +175,7 @@ const JishoSearch = (msg, cmd) => {
 
 	if (cmd.content !== undefined) {
 		const query = 'https://api.jisho.no/search/' + cmd.content;
-		const noResults = `「${cmd.content}」に一致する見出し語は見つかりませんでした`;
+		const noResults = [ `「${cmd.content}」に一致する見出し語は見つかりませんでした` ];
 		request(query, { json: true }, (err, res, body) => {
 			if (err) {
 				return console.log(err);
@@ -194,7 +199,7 @@ const JishoSearch = (msg, cmd) => {
 				});
 				msg.channel.send(result);
 			} else {
-				msg.channel.send(noResults);
+				msg.channel.send(RandomArrayElement(noResults));
 			}
 		});
 	}
@@ -268,6 +273,14 @@ client.on('message', (msg) => {
 			}
 		}
 	}
+});
+
+client.on('guildMemberAdd', (member) => {
+	const welcomeMsg = [
+		`A wild ${member} has appeared! Gjerne introduser deg i #jikoshokai - 野生の${member}が現れた！是非 #jikoshokai で自己紹介してね`
+	];
+	const channel = member.guild.channels.cache.find((ch) => ch.id === welcomeChannel);
+	channel.send(RandomArrayElement(welcomeMsg));
 });
 
 client.login(token);
